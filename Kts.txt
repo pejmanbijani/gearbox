@@ -1,0 +1,42 @@
+clc
+clear
+Dd = xlsread ('C:\Users\Silver\Desktop\data shit Dd.xlsx') ;
+
+rd1 = Dd (:,1);
+k1 = Dd (:,2) ;
+rd2 = Dd(:,3) ;
+k2 = Dd (:,4) ;
+rd3 = Dd(:,5) ;
+k3 = Dd(:,6) ;
+rd4 = Dd(:,7) ;
+k4 = Dd(:,8) ;
+
+Ddma = input ('enter D/d = ');
+rdma = input ('enter r/d = ');
+
+if (rdma>0.3)
+ka = interp1 (rd1 , k1 , rdma,'linear','extrap');
+kb = interp1 (rd2 , k2 , rdma,'linear','extrap');
+kc = interp1 (rd3 , k3 , rdma,'linear','extrap');
+kd = interp1 (rd4 , k4 , rdma,'linear','extrap');
+
+else
+
+ka = interp1 (rd1 , k1 , rdma);
+kb = interp1 (rd2 , k2 , rdma);
+kc = interp1 (rd3 , k3 , rdma);
+kd = interp1 (rd4 , k4 , rdma);
+end
+
+matrix = [ 1.09  ka ; 1.2  kb ;1.33 kc; 2  kd] ;
+x = matrix (: , 1 );
+y = matrix (: , 2 );
+
+if (Ddma<=2)&&(1.09<=Ddma)
+k=interp1 (x , y , Ddma);
+else
+ k=interp1(x , y , Ddma ,'linear','extrap');
+end
+
+disp(k)
+

@@ -1,0 +1,47 @@
+clc
+clear 
+Hnom=input('enter H nominal (hp)=');
+Ks=input('enter service factor Ks =');
+nd=input('enter Design Factor nd =');
+Hd=Hnom*Ks*nd;
+W=input('enter W(rpm) =');
+mG=input('enter mG = ');
+din=input('enter diameter 1 (in) =');
+V=din*W*pi/12;%ft/min
+num1=1.3;num2=1.8;num3=2.9;num4=3.3;num5=4.5;
+Mat=['A = '  num2str(num1) ; 'B = '  num2str(num2);'C = '  num2str(num3) ; 'D = '  num2str(num4);'E = '  num2str(num5)];
+disp(Mat)
+Bs=input('enter number due to the Belt section =');
+Din=mG*din; %in 
+d=din*25.4;
+D=Din*25.4;
+a=num2str(D);
+b=num2str(3*(D+d));
+disp([ a '(mm) =< ' 'C' ' =< ' b ' (mm)'])
+
+C0=input('Supposed C (mm)= ');
+Lp0=2*C0+ (pi*(D+d)/2)+ ((D-d)^2)/(4*C0);
+Lin0=(Lp0/25.4)-Bs;
+Lin1=num2str(Lin0);
+disp(['inside circumference L =' Lin1])
+
+Ltable=input('enter L (inside circumferences) from table (in) =');
+Lpin=Ltable+Bs;
+Lp=Lpin*25.4;
+C=0.25*( (Lp-(pi*(D+d)/2)) + ( (Lp-(pi*(D+d)/2))^2 -2*(D-d)^2 )^(1/2) );
+C1=num2str(C);
+disp([' C= ' C1 ' mm'])
+
+v=num2str(V);
+disp([' V = ' v ' ft/min'])
+
+c=(D-d)/C;
+c1=num2str(c);
+disp([' (D-d)/C = ' c1])
+Htab=input ('enter H table =');
+K1=input('enter K1 =');
+K2=input('enter K2 =');
+Ha=Htab*K1*K2;
+Nb0=Hd/Ha;
+Nb=ceil(Nb0);
+disp(Nb)

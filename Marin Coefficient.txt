@@ -1,0 +1,94 @@
+clc
+clear 
+close all
+
+table6_5=[50 1;90 0.897;95 0.868;99 0.814;99.9 0.753;99.99 0.702;99.999 0.659;99.9999 0.62];%table 6-5 page 301
+Sut=input('enter Sut (Mpa) =');
+d=input('enter Diameter (mm) = ');
+T=input('enter temperature (F) =');
+R=input('enter Reliability (Percent 50 to 100 ) = ');
+disp('choose type of surface finish :');
+disp('1. Ground');
+disp('2. Machined or coled-drawn');
+disp('3. Hot-rolled');
+disp('4. As-forged');
+a1=input('enter number = ');
+
+disp('choose type of loading :');
+disp('1. Torsion');
+disp('2. axial');
+disp('3. Bending')
+a2=input('enter number = ');
+switch a1
+    case 1
+        a=1.58;
+        b=-0.085;
+    case 2
+        a=4.51;
+        b=-0.265;
+    case 3
+        a=57.7;
+        b=-0.718;
+    case 4
+        a=272;
+        b=-0.995;
+    otherwise 
+        disp('play again :)');
+end
+
+switch a2
+    case 1 
+       if  (2.79 <= d) && ( d <= 51) 
+          Kb = ((d/7.62)^(-0.107)) ;
+        else
+           if (51 < d ) && (d <=254 )
+          Kb = 1.51*d^(-0.157);
+       else 
+          disp ('wrong')
+           end
+       end
+    case 2
+        Kb=1;
+        
+    case 3
+       if  (2.79 <= d) && ( d <= 51) 
+          Kb = ((d/7.62)^(-0.107)) ;
+        else
+           if (51 < d ) && (d <=254 )
+          Kb = 1.51*d^(-0.157);
+       else 
+          disp ('wrong')
+           end
+       end 
+end
+Ka=a*(Sut^b);
+switch a2
+    case 1
+        Kc=0.59;
+    case 2
+        Kc=0.85;
+    case 3
+        Kc=1;
+end
+Kd=0.975+ (0.000432*T)-(0.00000115*(T^2))+(0.00000000104*(T^3))-(0.000000000000595*(T^4));
+
+RTable=table6_5(:,1);
+KeTable=table6_5(:,2);
+
+if R>99.9999  
+    Ke = interp1 ( RTable, KeTable , R,'linear','extrap');
+else
+    Ke = interp1 ( RTable, KeTable , R);
+end
+
+Ka0=num2str(Ka);
+Kb0=num2str(Kb);
+Kc0=num2str(Kc);
+Kd0=num2str(Kd);
+Ke0=num2str(Ke);
+disp(['Ka = ' Ka0]);
+disp(['Kb = ' Kb0]);
+disp(['Kc = ' Kc0]);
+disp(['Kd = ' Kd0]);
+disp(['Ke = ' Ke0]);
+disp('Kf =  the factor kf is intended to account for the reduction in endurance limit due to all other effects');

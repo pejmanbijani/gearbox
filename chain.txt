@@ -1,0 +1,37 @@
+clc
+clear 
+Hnom=input('enter H nominal (hp)=');
+mG=input('enter mG =');
+Ks=input('enter Ks =');
+nd=input('enter nd =');
+N1=input('enter num of teeth =');
+N2=mG*N1;
+Hd=Hnom*Ks*nd;
+K1=input('enter K1 =');
+K2=input('enter K2 =');
+Ha=Hd;
+Htab=Ha/(K1*K2);
+disp('H table (hp)=')
+disp(Htab)
+p=input('enter pitch (in)=');
+x0=180/N1;
+x1=180/N2;
+d=p/sin(pi*x0/180);
+D=p/sin(pi*x1/180);
+a=30*p;
+b=50*p;
+a1=num2str(a);
+b1=num2str(b);
+disp([a1 '(in) =< C =< ' b1 '(in)'])
+C0=input('enter supposed C =');
+Lp0=(2*C0/p)+((N1+N2)/2)+( (N2-N1)^2 /(4*pi^2*C0/p) );
+disp(Lp0)
+Lp=input('enter L/p =');
+A=((N1+N2)/2)-Lp;
+C=(p/4) * (-A  + ((A^2)-8*((N2-N1)/(2*pi))^2)^(1/2)   );
+disp('C =')
+disp(C)
+disp('d =')
+disp(d)
+disp('D =')
+disp(D)

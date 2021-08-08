@@ -1,0 +1,48 @@
+
+function[k]=Kt(rdma,Ddma)
+Dd = xlsread ('C:\Users\Silver\Desktop\data shit Dd kt.xlsx') ;
+
+rd1 = Dd(:,9);
+k1 = Dd(:,10) ;
+rd2 = Dd(:,7) ;
+k2 = Dd(:,8) ;
+rd3 = Dd(:,5) ;
+k3 = Dd(:,6) ;
+rd4 = Dd(:,3) ;
+k4 = Dd(:,4) ;
+rd5 = Dd(:,1) ;
+k5 = Dd(:,2) ;
+
+if rdma>0.3 %akharin add
+ka = interp1 (rd1 , k1 , rdma,'linear','extrap');
+kd = interp1 (rd4 , k4 , rdma,'linear','extrap');
+ke = interp1 (rd5 , k5 , rdma,'linear','extrap');
+else
+ka = interp1 (rd1 , k1 , rdma);
+kd = interp1 (rd4 , k4 , rdma);
+ke = interp1 (rd5 , k5 , rdma);
+end
+
+if rdma>0.215 %akharin add
+    kb = interp1 (rd2 , k2 , rdma,'linear','extrap');
+else
+    kb = interp1 (rd2 , k2 , rdma);
+end
+
+if rdma>0.2 %akharin add
+    kc = interp1 (rd3 , k3 , rdma,'linear','extrap');
+else
+    kc = interp1 (rd3 , k3 , rdma);
+end
+
+matrix = [ 3  ka ; 1.5  kb ;1.1 kc; 1.05  kd ;1.02 ke] ;
+x = matrix (: , 1 );
+y = matrix (: , 2 );
+
+if (Ddma<=3)&&(1.02<=Ddma)
+k=interp1 (x , y , Ddma);
+else
+ k=interp1(x , y , Ddma ,'linear','extrap');
+end
+
+disp(k)

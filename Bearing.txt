@@ -1,0 +1,89 @@
+clc
+clear
+A = xlsread ('C:\Users\Silver\Desktop\F equal.xlsx') ;
+FC0=A(:,1);
+e0=A(:,2);
+Y0=A(:,3);
+Fr=input('enter Fr (kN)=');
+Fa=input('enter Fa (kN)=');
+W=input('enter W (rpm) =');
+Life=input('enter Life (year) =');
+disp('1.ball bearing')
+disp('2.roller bearing')
+Type=input('enter Type of bearing =');
+RD=input('enter ppercent of Reliability =');
+af=input('enter load factor =');
+x0=0.02;teta=4.459;b=1.483; %based on SKF catalog
+switch Type
+    case 1
+        a=3;
+    case 2
+        a=10/3;
+end
+FC0ma1=input('enter supposed Fa/C0 =');
+
+V=1;
+X=0.56;
+
+e1 = interp1 (FC0 , e0 , FC0ma1);
+Y1 = interp1 (FC0 , Y0 , FC0ma1);
+e1str=num2str(e1);
+Y1str=num2str(Y1);
+disp(['e = ' e1str])
+disp(['Y2 = ' Y1str])
+
+B=Fa/(V*Fr);
+if B<=e1
+  Fe1=V*Fr;
+else
+  Fe1=V*Fr*X+Y1*Fa;
+end
+Fe1str=num2str(Fe1);
+disp(['Fe = ' Fe1str ' KN'])
+
+LD1=Life*W*250*8*60;
+FD1=Fe1;
+LR1=10^6;
+xD=LD1/LR1;
+if RD==0.9
+   C10=FD1*(LD1/LR1)^(1/a); % FR = C10
+else
+   C10=af*FD1*( xD/(x0 + (teta - x0)*(log(1/RD))^(1/b) ) )^(1/a);
+end
+FR1str=num2str(C10);
+disp(['C10 ='  FR1str])
+
+C02=input('choose a bearing and enter C0 (KN) = ');
+FC0ma2=Fa/C02;
+FC0mastr2=num2str(FC0ma2);
+disp(['Fa/C0 new =' FC0mastr2]);
+e2 = interp1 (FC0 , e0 , FC0ma2);
+Y2 = interp1 (FC0 , Y0 , FC0ma2);
+e2str=num2str(e2);
+Y2str=num2str(Y2);
+disp(['e = ' e2str])
+disp(['Y2 = ' Y2str])
+
+if B<=e2
+   Fe2=V*Fr;
+else
+   Fe2=V*Fr*X+Y2*Fa;
+end
+Fe2str=num2str(Fe2);
+disp(['Fe new = ' Fe2str ' KN'])
+
+LD2=LD1;
+FD2=Fe2;
+LR2=LR1;
+xD=LD1/LR1;
+if RD==0.9
+   C101=FD2*(LD2/LR2)^(1/a); % FR = C10
+else
+   C101=af*FD2*( xD/(x0 + (teta - x0)*(log(1/RD))^(1/b) ) )^(1/a);
+end
+
+FR2str=num2str(C101);
+
+disp(['C10 new = '  FR2str])
+disp('if   (C10 new <= C10 bearing) the design is OK. ')
+
